@@ -64,7 +64,7 @@ def predict():
     if not allowed_file(audio_file.filename):
         return jsonify({'error': 'Format de fichier non supporté'}), 400
 
-    if 'clinical_data' not in request.fields:
+    if 'clinical_data' not in request.form:
         return jsonify({'error': 'Données cliniques manquantes'}), 400
 
     filename = secure_filename(audio_file.filename)
@@ -73,7 +73,7 @@ def predict():
 
     try:
         mfcc_features = extract_mfcc(filepath)
-        clinical_data_json = json.loads(request.fields['clinical_data'])
+        clinical_data_json = json.loads(request.form['clinical_data'])
         clinical_features = prepare_clinical_features(clinical_data_json)
 
         audio_input = np.expand_dims(mfcc_features, axis=0)
